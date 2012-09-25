@@ -1,0 +1,4 @@
+h1. Condo ActiveRecord Backend
+
+Include in your gem file: @gem 'condo_active_record'@
+Add migrations to your project run: @rake railties:install:migrations FROM=condo_active_record@
