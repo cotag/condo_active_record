@@ -55,7 +55,7 @@ module Condo
 			def self.check_exists(params)
 				params = {}.merge(params)
 				params[:user_id] = params[:user_id].to_s if params[:user_id].present?
-				params[:id] = params.delete(:upload_id).to_i if params[:upload_id].present?
+				params[:id] = params.delete(:upload_id).to_i if params[:upload_id].present?				
 				
 				self.where(params).first
 			end
@@ -64,6 +64,7 @@ module Condo
 			# Adds a new upload entry into the database
 			#
 			def self.add_entry(params)
+				params = {}.merge(params)
 				params.delete(:upload_id) if params[:upload_id].present?
 				params.delete(:id) if params[:id].present?
 				params.delete(:resumable_id) if params[:resumable_id].present?
