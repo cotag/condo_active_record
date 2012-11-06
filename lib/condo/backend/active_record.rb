@@ -39,7 +39,7 @@ module Condo
 			
 			attr_accessible :user_id, :file_name, :file_size, :file_id, :custom_params, 
 				:provider_namespace, :provider_name, :provider_location, :bucket_name,
-				:object_key, :object_options, :resumable_id, :resumable
+				:object_key, :object_options, :resumable_id, :resumable, :file_path
 				
 			
 			self.table_name = "#{::ActiveRecord::Base.table_name_prefix}condo_uploads"
