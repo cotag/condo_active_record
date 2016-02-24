@@ -35,18 +35,14 @@ module Condo
 		# => update_entry ({upload_id, resumable_id})
 		# => remove_entry (upload_id)
 		#
-		class ActiveRecord < ::ActiveRecord::Base
-			
-			attr_accessible :user_id, :file_name, :file_size, :file_id, :custom_params, 
-				:provider_namespace, :provider_name, :provider_location, :bucket_name,
-				:object_key, :object_options, :resumable_id, :resumable, :file_path
-				
-			
+		class ActiveRecord < ::ActiveRecord::Base			
 			self.table_name = "#{::ActiveRecord::Base.table_name_prefix}condo_uploads"
 			
 
-			serialize :custom_params, Hash
-			serialize :object_options, Hash
+			serialize :custom_params, JSON
+			serialize :object_options, JSON
+			serialize :part_list, JSON	# example: [1,2,5]
+			serialize :part_data, JSON  # example: {1:'abd23',2:'56sdv'}
 			
 			
 			#
