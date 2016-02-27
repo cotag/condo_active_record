@@ -15,7 +15,6 @@ module Condo
 		# => object_options		(custom options that were applied to this object - public/private etc)
 		# => resumable_id		(the id of the chunked upload)
 		# => resumable			(true if a resumable upload - must be set)
-		# => custom_params		(application specific data - needs to be serialised and de-serialised)
 		# => date_created		(the date the upload was started)
 		#
 		# => Each backend should have an ID that uniquely identifies an entry - id or upload_id
@@ -39,7 +38,6 @@ module Condo
 			self.table_name = "#{::ActiveRecord::Base.table_name_prefix}condo_uploads"
 			
 
-			serialize :custom_params, JSON
 			serialize :object_options, JSON
 			serialize :part_list, JSON	# example: [1,2,5]
 			serialize :part_data, JSON  # example: {1:'abd23',2:'56sdv'}
