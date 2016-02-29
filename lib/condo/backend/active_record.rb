@@ -1,6 +1,6 @@
 module Condo
     module Backend
-        
+
         #
         # The following data needs to be stored in any backend
         # => provider_namespace (for handling multiple upload controllers, defaults to global)
@@ -36,60 +36,62 @@ module Condo
         #
         class ActiveRecord < ::ActiveRecord::Base            
             self.table_name = "#{::ActiveRecord::Base.table_name_prefix}condo_uploads"
-            
+
 
             serialize :object_options, JSON
             serialize :part_list, JSON    # example: [1,2,5]
             serialize :part_data, JSON  # example: {1:'abd23',2:'56sdv'}
-            
-            
+
+
             # Checks for an exact match in the database given a set of parameters
             def self.check_exists(params)
                 params = {}.merge(params)
                 params[:user_id] = params[:user_id].to_s if params[:user_id].present?
                 params[:id] = params.delete(:upload_id).to_i if params[:upload_id].present?                
-                
+
                 self.where(params).first
             end
-            
+
             # Adds a new upload entry into the database
             def self.add_entry(params)
                 params = {}.merge(params)
                 params.delete(:upload_id) if params[:upload_id].present?
                 params.delete(:id) if params[:id].present?
                 params.delete(:resumable_id) if params[:resumable_id].present?
-                
+
                 self.create!(params)
             end
-            
+
+            def self.all_uploads
+                self.all
+            end
+
+            # Return a list of Uploads that were last updated before a particular time
+            def self.older_than(time)
+                self.where('updated_at < :time', time: time)
+            end
+
+
+
             # Updates self with the passed in parameters
             def update_entry(params)
                 result = self.update_attributes(params)
                 raise ActiveResource::ResourceInvalid if result == false
                 self
             end
-            
+
             # Deletes reference to the upload
             def remove_entry
                 self.destroy
             end
-            
+
             # Attribute accessors to comply with the backend spec
             def upload_id
                 self[:id]
             end
-            
+
             def date_created
                 self[:created_at]
-            end
-
-            def all_uploads
-                self.class.all
-            end
-
-            # Return a list of Uploads that were last updated before a particular time
-            def older_than(time)
-                self.class.where('updated_at < :time', time: time)
             end
 
             # Provide a clean up function that uses the condo strata to delete itself
